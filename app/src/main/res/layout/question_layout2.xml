@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.android.quizerino.MainActivity"
+    android:gravity="bottom"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/layout2_question"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:text="Question here"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/layout2_answer"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:maxLines="1"
+                android:maxLength="30"
+                android:layout_weight="1"
+                android:hint="Answer"
+                android:inputType="text"
+                android:layout_margin="20dp"
+                android:gravity="center"
+                android:textSize="30sp"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="bottom">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/buttonPrevious2"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="previous"
+                    android:onClick="previousQuiz"/>
+
+                <Button
+                    android:id="@+id/buttonNext2"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="next"
+                    android:onClick="nextQuiz"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                android:clickable="true"
+                android:onClick="displayAnswerList"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
