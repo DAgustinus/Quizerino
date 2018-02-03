@@ -21,14 +21,30 @@
         android:textSize="55sp"
         android:gravity="center" />
 
-    <TextView
-        android:id="@+id/scoreSheet"
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:id="@+id/image_score"/>
+
+    <ScrollView
+        android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
-        android:text="test"
-        android:gravity="center"
-        android:textSize="24sp"/>
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/scoreSheet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="test"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:shadowColor="@color/colorAccent"/>
+
+    </ScrollView>
+
 
     <Button
         android:id="@+id/buttonRestart"

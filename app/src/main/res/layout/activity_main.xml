@@ -8,17 +8,25 @@
     android:orientation="vertical"
     android:gravity="bottom">
 
+    <ImageView
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:src="@drawable/doge"/>
+
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Quezerino!\nTest your geography knowledge today!"
+        android:layout_height="0dp"
+        android:text="Quezerinos!\nTest your geography knowledge today!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:layout_weight="1"/>
 
     <Button
         android:id="@+id/buttonStart"

@@ -41,7 +41,7 @@
                 android:inputType="text"
                 android:layout_margin="20dp"
                 android:gravity="center"
-                android:textSize="30sp"/>
+                android:textSize="30sp" />
         </LinearLayout>
 
 

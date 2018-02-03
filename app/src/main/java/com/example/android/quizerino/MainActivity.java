@@ -1,5 +1,6 @@
 package com.example.android.quizerino;
 
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,39 +8,35 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
-    /**
-    Button nextButton = (Button) findViewById(R.id.buttonNext);
-    Button previousButton = (Button) findViewById(R.id.buttonPrevious);
-    Button submitButton = (Button) findViewById(R.id.buttonSubmit);
-    Button startButton = (Button) findViewById(R.id.buttonStart);
-    Button restartButton = (Button) findViewById(R.id.buttonRestart);
-    **/
 
     int quizNumber = 0;
-
+    int total_score_int = 0;
     String final_answer = "";
     String total_score = "";
 
     String[][] myQuestions = {{"1","2","What is the capital of California?","A. San Francisco","B. Sacramento","C. Los Angeles","D. San Diego"},
             {"1","1","What is the capital of Oregon?","A. Salem","B. Portland","C. Eugene","D. Beaverton"},
             {"1","3","What is the capital of Texas?","A. Houston","B. Dallas","C. Austin","D. San Antonio"},
-            {"1","4","What is the capital of Florida?","A. Miami","B. Orlando","C. Tampa","D. Tallahassee"},
-            {"1","2","What is the capital of Minnesota","A. Minneapolis","B. Saint Paul","C. Minnetonka","D. Duluth"},
             {"2","texas","Name the biggest state in the US:"},
             {"2","new york","Where's the statue of liberty located?"},
-            {"3","ab","Which cities never snowed?","San Francisco","Honolulu","Denver","New York"},
+            {"3","ab","Which cities never snowed?\n(You can select more than one)","San Jose","Honolulu","Denver","New York"},
             {"2","rhode island","Name the smallest state in the US:"},
-            {"3","bc","Which cities are the hottest?","San Francisco","Phoenix","Tucson","New York"}};
+            {"3","bc","Which 2 cities are the hottest?\n(You can select more than one)","San Francisco","Phoenix","Tucson","New York"},
+            {"1","4","What is the capital of Florida?","A. Miami","B. Orlando","C. Tampa","D. Tallahassee"},
+            {"1","2","What is the capital of Minnesota","A. Minneapolis","B. Saint Paul","C. Minnetonka","D. Duluth"}};
 
     String[] userAnswer = {"0","0","0","0","0","","","","",""};
 
@@ -47,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
      * Uncomment below if need to debug with the correct answer
      * @param savedInstanceState
      */
-    //String[] userAnswer = {"2","1","3","4","2","Texas ","New York","ab","Rhode Island","bc"};
+    //String[] userAnswer = {"2","1","3","Texas ","New York","ab","Rhode Island","","4","2"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
             answer_b.setText(myQuestions[quizNumber][4]);
             answer_c.setText(myQuestions[quizNumber][5]);
             answer_d.setText(myQuestions[quizNumber][6]);
-            prevButton.setClickable(prevClickAble);
-            nextButton.setClickable(nextClickAble);
+            prevButton.setEnabled(prevClickAble);
+            nextButton.setEnabled(nextClickAble);
             setSavedAnswer(getUserAnswer());
         }
         else if (quizType == 2){
@@ -111,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
             question.setText(myQuestions[quizNumber][2]);
             Button nextButton = (Button) findViewById(R.id.buttonNext2);
             Button prevButton = (Button) findViewById(R.id.buttonPrevious2);
-            prevButton.setClickable(prevClickAble);
-            nextButton.setClickable(nextClickAble);
+            prevButton.setEnabled(prevClickAble);
+            nextButton.setEnabled(nextClickAble);
             setSavedAnswer(getUserAnswer());
         }
 
@@ -131,10 +128,12 @@ public class MainActivity extends AppCompatActivity {
             checkB.setText(myQuestions[quizNumber][4]);
             checkC.setText(myQuestions[quizNumber][5]);
             checkD.setText(myQuestions[quizNumber][6]);
-            prevButton.setClickable(prevClickAble);
-            nextButton.setClickable(nextClickAble);
+            prevButton.setEnabled(prevClickAble);
+            nextButton.setEnabled(nextClickAble);
             setSavedAnswer(getUserAnswer());
         }
+
+        setSubmitButton(submitButtonCheck());
     }
 
     /**
@@ -234,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
             setSavedAnswer(answerString);
         }
 
+        setSubmitButton(submitButtonCheck());
 
     }
 
@@ -247,6 +247,10 @@ public class MainActivity extends AppCompatActivity {
         return userAnswered;
     }
 
+    /**
+     * this is to set the user answer
+     * @param answer received the user answer and store it to the string
+     */
     public void setSavedAnswer(String answer){
 
         if (Integer.parseInt(myQuestions[quizNumber][0]) == 1){
@@ -329,6 +333,8 @@ public class MainActivity extends AppCompatActivity {
         TextView scoreTotal = (TextView) findViewById(R.id.totalScore);
         scoreSheet.setText(final_answer);
         scoreTotal.setText(total_score + "/10");
+        Toast toast = Toast.makeText(getApplicationContext(),"Congratulations on finishing!\nYou got " + total_score + " correct!",Toast.LENGTH_LONG);
+        toast.show();
     }
 
     /**
@@ -336,12 +342,11 @@ public class MainActivity extends AppCompatActivity {
      * @param v
      */
     public void displayAnswerList(View v){
-
         final_answer = setAnswer().toString();
         setContentView(R.layout.result_page);
         quizScorer();
         displayScore();
-
+        setImageView(total_score_int);
     }
 
     /**
@@ -357,19 +362,12 @@ public class MainActivity extends AppCompatActivity {
             String actualAnswer = myQuestions[i][1].toLowerCase().trim();
 
             if (i == 0){
-                if (userAnswered.equals(actualAnswer) == true){
-                    messaged += "Number " + (i+1) + " is CORRECT!";
-                }
-                else {
+                if (userAnswered.equals(actualAnswer) == false){
                     messaged += "Number " + (i+1) + " is WRONG!";
                 }
-
             }
             else{
-                if (userAnswered.equals(actualAnswer) == true){
-                    messaged += "\nNumber " + (i+1) + " is CORRECT!";
-                }
-                else {
+                if (userAnswered.equals(actualAnswer) == false){
                     messaged += "\nNumber " + (i+1) + " is WRONG!";
                 }
             }
@@ -397,6 +395,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("compare the answer","" + userAnswer[i] + " vs " + myQuestions[i][1] + " is FALSE");
             }
         }
+        total_score_int = scoreTotal;
         total_score = Integer.toString(scoreTotal);
     }
 
@@ -406,28 +405,53 @@ public class MainActivity extends AppCompatActivity {
      */
     public void clearAnswer(){
         quizNumber = 0;
-        String[] resetAnswer = {"0","0","0","0","0","","","","",""}; //setArray().toArray(new String[setArray().size()]);
+        String[] resetAnswer = {"0","0","0","","","","","","0","0"}; //setArray().toArray(new String[setArray().size()]);
         userAnswer = resetAnswer;
     }
 
     /**
-     * Code below is to set the array dynamically depending on the total amount of questions
+     * This checks the status of the user answers
+     * If there are no answers, it will tell setSubmitButton to false by using the return
+     * @return boolean which then used for the setSubmitButton
      */
-//    public ArrayList<String> setArray(){
-//        ArrayList<String> arrList = new ArrayList<String>();
-//        String zero = "0";
-//        String empty = "";
-//
-//        for(int i = 0; i < myQuestions.length; i++){
-//            switch (myQuestions[i][0]){
-//                case "1":
-//                    arrList.add(zero);
-//                case "2":
-//                    arrList.add(empty);
-//                case "3":
-//                    arrList.add(empty);
-//            }
-//        }
-//        return arrList;
-//    }
+    public boolean submitButtonCheck(){
+        if (Arrays.asList(userAnswer).contains("0") == true || Arrays.asList(userAnswer).contains("") == true){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    /**
+     * Set the submit button to be eenabled or not
+     * @param enable sets the button to be enabled or not
+     */
+    private void setSubmitButton(boolean enable){
+        Button submitButton = (Button) findViewById(R.id.buttonSubmit);
+        if (enable == true){
+            submitButton.setEnabled(true);
+        }
+        else{
+            submitButton.setEnabled(false);
+        }
+    }
+
+    /**
+     * this sets the score image
+     * @param scores
+     */
+    private void setImageView(int scores){
+        ImageView imageScore = (ImageView) findViewById(R.id.image_score);
+
+        if (scores >= 0 && scores <= 2){
+            imageScore.setImageResource(R.drawable.img0to2);
+        } else if (scores >= 3 && scores <= 5) {
+            imageScore.setImageResource(R.drawable.img3to5);
+        } else if (scores >= 6 && scores <= 8) {
+            imageScore.setImageResource(R.drawable.img6to8);
+        } else if (scores >= 9 && scores <=10) {
+            imageScore.setImageResource(R.drawable.img9to10);
+        }
+    }
 }
